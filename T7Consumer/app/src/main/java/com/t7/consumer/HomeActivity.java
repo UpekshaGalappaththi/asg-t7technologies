@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,7 +29,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.t7.consumer.databinding.ActivityHomeBinding;
 
 import net.openid.appauth.AuthState;
@@ -39,6 +45,14 @@ import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenResponse;
 
 import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -60,6 +74,8 @@ public class HomeActivity extends AppCompatActivity {
     private static final String MYACCOUNT_ENDPOINT = "https://myaccount.asgardeo.io/t/t7technologies";
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
+    private RecyclerView recyclerView;
+    private CardAdapter adapter;
     int counter = 0;
 
     @Override
@@ -102,7 +118,71 @@ public class HomeActivity extends AppCompatActivity {
         handleAuthCallback(getIntent());
 //        Button btnProfile = findViewById(R.id.btnProfile);
 //        btnProfile.setOnClickListener(v -> openProfile(v.getContext()));
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+
+        String json = null;
+        try {
+            json = getJsonResponse();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Gson gson = new Gson();
+        CardItem[] products = gson.fromJson(json, CardItem[].class);
+        List<CardItem> cardList = Arrays.asList(products);
+        adapter = new CardAdapter(cardList);
+        recyclerView.setAdapter(adapter);
+
+
+        // Inflate the layout containing the CardView
+        View cardViewLayout = getLayoutInflater().inflate(R.layout.card_view, null);
+
+        // Find the CardView within the inflated layout
+        CardView cardView = cardViewLayout.findViewById(R.id.cardView);
+
+        Button addToCartButton = cardViewLayout.findViewById(R.id.addToCartButton);
+        System.out.println("check");
+
+        addToCartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the "Add to Cart" button click event
+                // For example, you can add the item to a shopping cart or show a message
+                // You can get the data from the CardView's text views, e.g.:
+//                String name = ((TextView) cardView.findViewById(R.id.name)).getText().toString();
+//                String price = ((TextView) cardView.findViewById(R.id.price)).getText().toString();
+//                // Add elements to the list
+//                list.add(name);
+                System.out.println("clicked");
+                // Print the contents of the list
+//                System.out.println(list);
+//                TextView textView = findViewById(R.id.textView3);
+//                textView.setText(list.toString());
+//                Toast.makeText(MainActivity.this, "Added " + name + " to cart for " + price, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+    private String getJsonResponse() throws IOException {
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        OkHttpClient client = new OkHttpClient();
+
+        String url = "https://asg-t7technologies.fly.dev/devices";
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        }
+
+    }
+
 
     private boolean setNavigationItemSelection(int id) {
 
