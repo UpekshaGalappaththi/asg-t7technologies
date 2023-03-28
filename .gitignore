@@ -1,0 +1,335 @@
+# Created by https://www.toptal.com/developers/gitignore/api/android,java,gradle,intellij,androidstudio
+# Edit at https://www.toptal.com/developers/gitignore?templates=android,java,gradle,intellij,androidstudio
+
+### Android ###
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log/OS Files
+*.log
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json
+
+# IntelliJ
+*.iml
+/.idea/
+T7ConsumerBackend/.idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Android Profiling
+*.hprof
+
+### Android Patch ###
+gen-external-apklibs
+
+# Replacement of .externalNativeBuild directories introduced
+# with Android Studio 3.5.
+
+### Intellij ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff
+T7ConsumerBackend/.idea/**/workspace.xml
+T7ConsumerBackend/.idea/**/tasks.xml
+T7ConsumerBackend/.idea/**/usage.statistics.xml
+T7ConsumerBackend/.idea/**/dictionaries
+T7ConsumerBackend/.idea/**/shelf
+
+# AWS User-specific
+T7ConsumerBackend/.idea/**/aws.xml
+
+# Generated files
+T7ConsumerBackend/.idea/**/contentModel.xml
+
+# Sensitive or high-churn files
+T7ConsumerBackend/.idea/**/dataSources/
+T7ConsumerBackend/.idea/**/dataSources.ids
+T7ConsumerBackend/.idea/**/dataSources.local.xml
+T7ConsumerBackend/.idea/**/sqlDataSources.xml
+T7ConsumerBackend/.idea/**/dynamic.xml
+T7ConsumerBackend/.idea/**/uiDesigner.xml
+T7ConsumerBackend/.idea/**/dbnavigator.xml
+
+# Gradle
+T7ConsumerBackend/.idea/**/gradle.xml
+T7ConsumerBackend/.idea/**/libraries
+
+# Gradle and Maven with auto-import
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.  Uncomment if using
+# auto-import.
+# .idea/artifacts
+# .idea/compiler.xml
+# .idea/jarRepositories.xml
+# .idea/modules.xml
+# .idea/*.iml
+# .idea/modules
+# *.iml
+# *.ipr
+
+# CMake
+cmake-build-*/
+
+# Mongo Explorer plugin
+T7ConsumerBackend/.idea/**/mongoSettings.xml
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Cursive Clojure plugin
+T7ConsumerBackend/.idea/replstate.xml
+
+# SonarLint plugin
+T7ConsumerBackend/.idea/sonarlint/
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Editor-based Rest Client
+T7ConsumerBackend/.idea/httpRequests
+
+# Android studio 3.1+ serialized cache file
+T7ConsumerBackend/.idea/caches/build_file_checksums.ser
+
+### Intellij Patch ###
+# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+
+# *.iml
+# modules.xml
+# .idea/misc.xml
+# *.ipr
+
+# Sonarlint plugin
+# https://plugins.jetbrains.com/plugin/7973-sonarlint
+T7ConsumerBackend/.idea/**/sonarlint/
+
+# SonarQube Plugin
+# https://plugins.jetbrains.com/plugin/7238-sonarqube-community-plugin
+T7ConsumerBackend/.idea/**/sonarIssues.xml
+
+# Markdown Navigator plugin
+# https://plugins.jetbrains.com/plugin/7896-markdown-navigator-enhanced
+T7ConsumerBackend/.idea/**/markdown-navigator.xml
+T7ConsumerBackend/.idea/**/markdown-navigator-enh.xml
+T7ConsumerBackend/.idea/**/markdown-navigator/
+
+# Cache file creation bug
+# See https://youtrack.jetbrains.com/issue/JBR-2257
+T7ConsumerBackend/.idea/$CACHE_FILE$
+
+# CodeStream plugin
+# https://plugins.jetbrains.com/plugin/12206-codestream
+T7ConsumerBackend/.idea/codestream.xml
+
+# Azure Toolkit for IntelliJ plugin
+# https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij
+T7ConsumerBackend/.idea/**/azureSettings.xml
+
+### Java ###
+# Compiled class file
+*.class
+
+# Log file
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+
+### Gradle ###
+.gradle
+**/build/
+!T7ConsumerBackend/src/**/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+!gradle-wrapper.properties
+
+# Cache of project
+.gradletasknamecache
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+### Gradle Patch ###
+# Java heap dump
+
+### AndroidStudio ###
+# Covers files to be ignored for android development using Android Studio.
+
+# Built application files
+*.ap_
+*.aab
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+
+# Generated files
+bin/
+gen/
+
+# Gradle files
+
+# Signing files
+.signing/
+
+# Local configuration file (sdk path, etc)
+
+# Proguard folder generated by Eclipse
+proguard/
+
+# Log Files
+
+# Android Studio
+/*/build/
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/production
+.navigation/
+*.ipr
+*~
+*.swp
+
+# Keystore files
+
+# Google Services (e.g. APIs or Firebase)
+# google-services.json
+
+# Android Patch
+
+# External native build folder generated in Android Studio 2.2 and later
+.externalNativeBuild
+
+# NDK
+obj/
+
+# IntelliJ IDEA
+/out/
+
+# User-specific configurations
+T7ConsumerBackend/.idea/caches/
+T7ConsumerBackend/.idea/libraries/
+T7ConsumerBackend/.idea/shelf/
+T7ConsumerBackend/.idea/workspace.xml
+T7ConsumerBackend/.idea/tasks.xml
+T7ConsumerBackend/.idea/.name
+T7ConsumerBackend/.idea/compiler.xml
+T7ConsumerBackend/.idea/copyright/profiles_settings.xml
+T7ConsumerBackend/.idea/encodings.xml
+T7ConsumerBackend/.idea/misc.xml
+T7ConsumerBackend/.idea/modules.xml
+T7ConsumerBackend/.idea/scopes/scope_settings.xml
+T7ConsumerBackend/.idea/dictionaries
+T7ConsumerBackend/.idea/vcs.xml
+T7ConsumerBackend/.idea/jsLibraryMappings.xml
+T7ConsumerBackend/.idea/datasources.xml
+T7ConsumerBackend/.idea/dataSources.ids
+T7ConsumerBackend/.idea/sqlDataSources.xml
+T7ConsumerBackend/.idea/dynamic.xml
+T7ConsumerBackend/.idea/uiDesigner.xml
+T7ConsumerBackend/.idea/assetWizardSettings.xml
+T7ConsumerBackend/.idea/gradle.xml
+T7ConsumerBackend/.idea/jarRepositories.xml
+T7ConsumerBackend/.idea/navEditor.xml
+
+# Legacy Eclipse project files
+.cproject
+.settings/
+
+# Mobile Tools for Java (J2ME)
+
+# Package Files #
+
+# virtual machine crash logs (Reference: http://www.java.com/en/download/help/error_hotspot.xml)
+
+## Plugin-specific files:
+
+# mpeltonen/sbt-idea plugin
+
+# JIRA plugin
+
+# Mongo Explorer plugin
+T7ConsumerBackend/.idea/mongoSettings.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+
+### AndroidStudio Patch ###
+
+!/gradle/wrapper/gradle-wrapper.jar
+
+HELP.md
+target/
+!T7ConsumerBackend/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+application-local.yml
+*.log
+node_modules/
+node/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# End of https://www.toptal.com/developers/gitignore/api/android,java,gradle,intellij,androidstudio
