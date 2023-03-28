@@ -21,7 +21,8 @@ output.json
 
 # IntelliJ
 *.iml
-.idea/
+/.idea/
+T7ConsumerBackend/.idea/
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
@@ -47,30 +48,30 @@ gen-external-apklibs
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
+T7ConsumerBackend/.idea/**/workspace.xml
+T7ConsumerBackend/.idea/**/tasks.xml
+T7ConsumerBackend/.idea/**/usage.statistics.xml
+T7ConsumerBackend/.idea/**/dictionaries
+T7ConsumerBackend/.idea/**/shelf
 
 # AWS User-specific
-.idea/**/aws.xml
+T7ConsumerBackend/.idea/**/aws.xml
 
 # Generated files
-.idea/**/contentModel.xml
+T7ConsumerBackend/.idea/**/contentModel.xml
 
 # Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
+T7ConsumerBackend/.idea/**/dataSources/
+T7ConsumerBackend/.idea/**/dataSources.ids
+T7ConsumerBackend/.idea/**/dataSources.local.xml
+T7ConsumerBackend/.idea/**/sqlDataSources.xml
+T7ConsumerBackend/.idea/**/dynamic.xml
+T7ConsumerBackend/.idea/**/uiDesigner.xml
+T7ConsumerBackend/.idea/**/dbnavigator.xml
 
 # Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
+T7ConsumerBackend/.idea/**/gradle.xml
+T7ConsumerBackend/.idea/**/libraries
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -89,7 +90,7 @@ gen-external-apklibs
 cmake-build-*/
 
 # Mongo Explorer plugin
-.idea/**/mongoSettings.xml
+T7ConsumerBackend/.idea/**/mongoSettings.xml
 
 # File-based project format
 *.iws
@@ -104,10 +105,10 @@ out/
 atlassian-ide-plugin.xml
 
 # Cursive Clojure plugin
-.idea/replstate.xml
+T7ConsumerBackend/.idea/replstate.xml
 
 # SonarLint plugin
-.idea/sonarlint/
+T7ConsumerBackend/.idea/sonarlint/
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
@@ -116,10 +117,10 @@ crashlytics-build.properties
 fabric.properties
 
 # Editor-based Rest Client
-.idea/httpRequests
+T7ConsumerBackend/.idea/httpRequests
 
 # Android studio 3.1+ serialized cache file
-.idea/caches/build_file_checksums.ser
+T7ConsumerBackend/.idea/caches/build_file_checksums.ser
 
 ### Intellij Patch ###
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
@@ -131,29 +132,29 @@ fabric.properties
 
 # Sonarlint plugin
 # https://plugins.jetbrains.com/plugin/7973-sonarlint
-.idea/**/sonarlint/
+T7ConsumerBackend/.idea/**/sonarlint/
 
 # SonarQube Plugin
 # https://plugins.jetbrains.com/plugin/7238-sonarqube-community-plugin
-.idea/**/sonarIssues.xml
+T7ConsumerBackend/.idea/**/sonarIssues.xml
 
 # Markdown Navigator plugin
 # https://plugins.jetbrains.com/plugin/7896-markdown-navigator-enhanced
-.idea/**/markdown-navigator.xml
-.idea/**/markdown-navigator-enh.xml
-.idea/**/markdown-navigator/
+T7ConsumerBackend/.idea/**/markdown-navigator.xml
+T7ConsumerBackend/.idea/**/markdown-navigator-enh.xml
+T7ConsumerBackend/.idea/**/markdown-navigator/
 
 # Cache file creation bug
 # See https://youtrack.jetbrains.com/issue/JBR-2257
-.idea/$CACHE_FILE$
+T7ConsumerBackend/.idea/$CACHE_FILE$
 
 # CodeStream plugin
 # https://plugins.jetbrains.com/plugin/12206-codestream
-.idea/codestream.xml
+T7ConsumerBackend/.idea/codestream.xml
 
 # Azure Toolkit for IntelliJ plugin
 # https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij
-.idea/**/azureSettings.xml
+T7ConsumerBackend/.idea/**/azureSettings.xml
 
 ### Java ###
 # Compiled class file
@@ -183,7 +184,7 @@ replay_pid*
 ### Gradle ###
 .gradle
 **/build/
-!src/**/build/
+!T7ConsumerBackend/src/**/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -262,30 +263,30 @@ obj/
 /out/
 
 # User-specific configurations
-.idea/caches/
-.idea/libraries/
-.idea/shelf/
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/.name
-.idea/compiler.xml
-.idea/copyright/profiles_settings.xml
-.idea/encodings.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/scopes/scope_settings.xml
-.idea/dictionaries
-.idea/vcs.xml
-.idea/jsLibraryMappings.xml
-.idea/datasources.xml
-.idea/dataSources.ids
-.idea/sqlDataSources.xml
-.idea/dynamic.xml
-.idea/uiDesigner.xml
-.idea/assetWizardSettings.xml
-.idea/gradle.xml
-.idea/jarRepositories.xml
-.idea/navEditor.xml
+T7ConsumerBackend/.idea/caches/
+T7ConsumerBackend/.idea/libraries/
+T7ConsumerBackend/.idea/shelf/
+T7ConsumerBackend/.idea/workspace.xml
+T7ConsumerBackend/.idea/tasks.xml
+T7ConsumerBackend/.idea/.name
+T7ConsumerBackend/.idea/compiler.xml
+T7ConsumerBackend/.idea/copyright/profiles_settings.xml
+T7ConsumerBackend/.idea/encodings.xml
+T7ConsumerBackend/.idea/misc.xml
+T7ConsumerBackend/.idea/modules.xml
+T7ConsumerBackend/.idea/scopes/scope_settings.xml
+T7ConsumerBackend/.idea/dictionaries
+T7ConsumerBackend/.idea/vcs.xml
+T7ConsumerBackend/.idea/jsLibraryMappings.xml
+T7ConsumerBackend/.idea/datasources.xml
+T7ConsumerBackend/.idea/dataSources.ids
+T7ConsumerBackend/.idea/sqlDataSources.xml
+T7ConsumerBackend/.idea/dynamic.xml
+T7ConsumerBackend/.idea/uiDesigner.xml
+T7ConsumerBackend/.idea/assetWizardSettings.xml
+T7ConsumerBackend/.idea/gradle.xml
+T7ConsumerBackend/.idea/jarRepositories.xml
+T7ConsumerBackend/.idea/navEditor.xml
 
 # Legacy Eclipse project files
 .cproject
@@ -304,7 +305,7 @@ obj/
 # JIRA plugin
 
 # Mongo Explorer plugin
-.idea/mongoSettings.xml
+T7ConsumerBackend/.idea/mongoSettings.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 
@@ -314,7 +315,7 @@ obj/
 
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!T7ConsumerBackend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 application-local.yml
