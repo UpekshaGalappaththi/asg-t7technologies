@@ -78,6 +78,9 @@ public class HomeActivity extends AppCompatActivity {
     private static final String AUTHORIZATION_ENDPOINT = "https://api.asgardeo.io/t/t7technologies/oauth2/authorize";
     private static final String LOGOUT_ENDPOINT = "https://api.asgardeo.io/t/t7technologies/oidc/logout";
     private static final String MYACCOUNT_ENDPOINT = "https://myaccount.asgardeo.io/t/t7technologies";
+
+    private static final String PURCHASE_ENDPOINT = "https://331gmgq1ba.execute-api.eu-north-1.amazonaws.com/purchase";
+
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
     private RecyclerView recyclerView;
@@ -98,6 +101,83 @@ public class HomeActivity extends AppCompatActivity {
         binding.appBarHome.fab.setOnClickListener(view -> {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
+            ArrayList<String> cartNames = CardAdapter.getCartNames();
+            ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Name\t\tPrice\n");
+
+            for (int i = 0; i < cartNames.size(); i++) {
+                stringBuilder.append(cartNames.get(i) + "\t\t" + cartPrices.get(i) + "\n");
+            }
+            int totalPrice = 0;
+            for (int i = 0; i < CardAdapter.priceArray.size(); i++) {
+                totalPrice += Integer.parseInt(CardAdapter.priceArray.get(i));
+            }
+            stringBuilder.append("Total Price: " + totalPrice);
+            builder.setMessage(stringBuilder.toString())
+                    .setCancelable(false);
+            builder.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // do something when the OK button is clicked
+
+                    if (CardAdapter.nameArray.size() == 0) {
+                        Snackbar.make(view, "Cart is empty. Please add to cart to continue", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Action", null).show();
+                        return;
+                    }
+                    else {
+                    try {
+                        purchaseOnClick(view);
+                    } catch (JSONException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if(authState != null && authState.isAuthorized()){
+                        Snackbar.make(view, "Thank you for your purchase/n The order receipt has been sent to your email", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Action", null).show();}
+                    else{
+                        // snackbar to with action
+                        Snackbar.make(view, "Please login to purchase", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Login", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // do something
+                                        loginOnClick();
+                                    }
+                                }).show();
+
+
+                    }
+                }}
+
+            });
+
+            builder.setNegativeButton("Clear Cart", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // do something when the OK button is clicked
+                    CardAdapter.clearNameArray();
+                    CardAdapter.clearPriceArray();
+
+                    Snackbar.make(view, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Action", null).show();
+                }
+
+            });
+
+            builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // do something when the OK button is clicked
+
+                }
+
+            });
+
+
+            AlertDialog alert = builder.create();
+            alert.show();
+
+
 
             counter++;
             binding.appBarHome.fabCounter.setText(String.valueOf(counter));
@@ -123,133 +203,6 @@ public class HomeActivity extends AppCompatActivity {
         updateUI();
         initAuth();
         handleAuthCallback(getIntent());
-//        Button btnProfile = findViewById(R.id.btnProfile);
-//        btnProfile.setOnClickListener(v -> openProfile(v.getContext()));
-
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-
-        String json = null;
-        try {
-            json = getJsonResponse();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        Gson gson = new Gson();
-        CardItem[] products = gson.fromJson(json, CardItem[].class);
-        List<CardItem> cardList = Arrays.asList(products);
-        adapter = new CardAdapter(cardList);
-        recyclerView.setAdapter(adapter);
-
-        // in the activity's Java file
-
-        Button cartButton = findViewById(R.id.viewCartButton);
-
-        cartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // actions to take when the button is clicked
-//                ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-
-//                Intent intent = new Intent(HomeActivity.this, CartView.class);
-//                startActivity(intent);
-//
-//            }
-                ArrayList<String> cartNames = CardAdapter.getCartNames();
-                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Name\t\tPrice\n");
-
-                for (int i = 0; i < cartNames.size(); i++) {
-                    stringBuilder.append(cartNames.get(i) + "\t\t" + cartPrices.get(i) + "\n");
-                }
-                builder.setMessage(stringBuilder.toString())
-                            .setCancelable(false);
-//                            .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                    // do something when the OK button is clicked
-//                                    CardAdapter.clearNameArray();
-//                                    CardAdapter.clearPriceArray();
-//
-////                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
-////                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-////
-////                System.out.println(cartNames);
-////                System.out.println(cartPrices);
-//                                    Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_INDEFINITE)
-//                                            .setAction("Action", null).show();
-//                                }
-//
-//                            });
-                builder.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // do something when the OK button is clicked
-                        CardAdapter.clearNameArray();
-                        CardAdapter.clearPriceArray();
-                        try {
-                            purchaseOnClick(v);
-                        } catch (JSONException | IOException e) {
-                            throw new RuntimeException(e);
-                        }
-
-//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-                        Snackbar.make(v, "Thank you for your purchase", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("Action", null).show();
-
-                    }
-
-                });
-
-                builder.setNegativeButton("Clear Cart", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // do something when the OK button is clicked
-                        CardAdapter.clearNameArray();
-                        CardAdapter.clearPriceArray();
-
-//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-                        Snackbar.make(v, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("Action", null).show();
-                    }
-
-                });
-
-                builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // do something when the OK button is clicked
-
-
-//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-//                        Snackbar.make(v, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
-//                                .setAction("Action", null).show();
-                    }
-
-                });
-
-
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-        });
 
     }
 
@@ -257,9 +210,9 @@ public class HomeActivity extends AppCompatActivity {
     private void purchaseOnClick(View v) throws JSONException, IOException {
 
         if (authState == null || !authState.isAuthorized()) {
-//            initAuthzRequest();
                             Snackbar.make(v, "Please login to purchase", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                            System.out.println("Please login to purchase");
         } else {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
@@ -272,16 +225,13 @@ public class HomeActivity extends AppCompatActivity {
                 totalPrice += Integer.parseInt(CardAdapter.priceArray.get(i));
             }
         json.put("total", totalPrice);
+            System.out.println(totalPrice);
         String body = json.toString();
-//        TextView textView = findViewById(R.id.textView3);
-//        textView.setText(body);
-        String url = "https://331gmgq1ba.execute-api.eu-north-1.amazonaws.com/purchase";
-        postPurchase(url,body);
-//        System.out.println(response);
-//
-//        TextView textView2 = findViewById(R.id.textView2);
-//        textView2.setText(response);
 
+        String url = PURCHASE_ENDPOINT;
+        postPurchase(url,body);
+            CardAdapter.clearNameArray();
+            CardAdapter.clearPriceArray();
 
         }
     }
@@ -316,24 +266,6 @@ public class HomeActivity extends AppCompatActivity {
         });
         return null;
     }
-
-    private String getJsonResponse() throws IOException {
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        OkHttpClient client = new OkHttpClient();
-
-        String url = "https://asg-t7technologies.fly.dev/devices";
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
-        }
-
-    }
-
 
     private boolean setNavigationItemSelection(int id) {
 
