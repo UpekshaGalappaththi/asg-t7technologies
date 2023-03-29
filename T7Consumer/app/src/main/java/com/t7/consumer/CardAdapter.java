@@ -28,12 +28,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
 
-
-//    public CardAdapter(List<Cart> cartItems) {
-//        this.cartItems = cartItems;
-//    }
-
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -44,14 +38,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CardItem card = cardList.get(position);
-        // Bind data to the UI elements in the ViewHolder
-        // For example:
-        // holder.imageView.setImageURI(item.getImageUrl());
 
         String cardDescription = card.getDescription();
-        String cardSummary = cardDescription.substring(0, 20);
+        String cardSummary = cardDescription.substring(0, 40);
         holder.name.setText("Name : " + card.getName());
-        holder.price.setText("Price : " + card.getPrice());
+        holder.price.setText("Price USD: " + card.getPrice());
         holder.description.setText("Description : " + cardSummary + "...");
         holder.manufacturer.setText("Manufacturer : " + card.getManufacturer());
         // Inflate the layout containing the CardView
@@ -60,13 +51,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             public void onClick(View view) {
 
 
-
-                // Handle button click event here
-                // Handle the "Add to Cart" button click event
-                // For example, you can add the item to a shopping cart or show a message
-                // You can get the data from the CardView's text views, e.g.:
-//                String name = ((TextView) view.findViewById(R.id.name)).getText().toString();
-//                String price = ((TextView) view.findViewById(R.id.price)).getText().toString();
                 String name = card.getName();
                 String price = card.getPrice();
 
@@ -75,32 +59,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 System.out.println("Name : " + nameArray); // Print the current cartItems list
                 System.out.println("Price : " + priceArray); // Print the current cartItems list
 
-//                ArrayList <String> cartNames = getCartNames();
-//                System.out.println(cartNames);
 
-//                for (int i = 0; i < nameArray.size() && i < priceArray.size(); i++) {
-//                    System.out.println("Name" + nameArray.get(i) + "Price" + priceArray.get(i));
-//                }
-
-//
-//                System.out.println("Hash code of list1: " + cartItems.hashCode());
-//                System.out.println("Memory ID of list: " + System.identityHashCode(cartItems));
-//
-//
-//                for (Cart pair : cartItems) {
-//                    System.out.println("Name: " + pair.getName() + ", Price: " + pair.getPrice());
-
-//                }
-
-
-//                // Add elements to the list
-//                list.add(card);
-//                System.out.println(list);
-                // Print the contents of the list
-//                System.out.println(name);
-//                TextView textView = findViewById(R.id.textView3);
-//                textView.setText(list.toString());
-                Toast.makeText(view.getContext(), "Added  to cart for ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "Added to cart: " + name, Toast.LENGTH_SHORT).show();
             }
         });
     }

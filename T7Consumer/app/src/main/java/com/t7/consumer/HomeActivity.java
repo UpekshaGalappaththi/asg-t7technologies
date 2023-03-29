@@ -86,7 +86,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CardAdapter adapter;
 
-    int counter = 0;
+    int counter =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,16 +106,16 @@ public class HomeActivity extends AppCompatActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Name\t\tPrice\n");
+            stringBuilder.append("Name\t\t - Price (USD)\n\n");
 
             for (int i = 0; i < cartNames.size(); i++) {
-                stringBuilder.append(cartNames.get(i) + "\t\t" + cartPrices.get(i) + "\n");
+                stringBuilder.append(cartNames.get(i) + "\t\t - " + cartPrices.get(i) + "\n");
             }
             int totalPrice = 0;
             for (int i = 0; i < CardAdapter.priceArray.size(); i++) {
                 totalPrice += Integer.parseInt(CardAdapter.priceArray.get(i));
             }
-            stringBuilder.append("Total Price: " + totalPrice);
+            stringBuilder.append("\nTotal Price: " + totalPrice);
             builder.setMessage(stringBuilder.toString())
                     .setCancelable(false);
             builder.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
@@ -123,7 +123,7 @@ public class HomeActivity extends AppCompatActivity {
                     // do something when the OK button is clicked
 
                     if (CardAdapter.nameArray.size() == 0) {
-                        Snackbar.make(view, "Cart is empty. Please add to cart to continue", Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(view, "Cart is empty. Please add to cart to continue", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         return;
                     }
@@ -134,11 +134,11 @@ public class HomeActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                     if(authState != null && authState.isAuthorized()){
-                        Snackbar.make(view, "Thank you for your purchase/n The order receipt has been sent to your email", Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(view, "Thank you for your purchase/n The order receipt has been sent to your email", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();}
                     else{
                         // snackbar to with action
-                        Snackbar.make(view, "Please login to purchase", Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(view, "Please login to purchase", Snackbar.LENGTH_LONG)
                                 .setAction("Login", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -159,7 +159,7 @@ public class HomeActivity extends AppCompatActivity {
                     CardAdapter.clearNameArray();
                     CardAdapter.clearPriceArray();
 
-                    Snackbar.make(view, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(view, "Cleared Cart", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
 
@@ -179,8 +179,9 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-            counter++;
-            binding.appBarHome.fabCounter.setText(String.valueOf(counter));
+//            counter++;
+//            int cartItems = CardAdapter.getCartNames().size();
+//            binding.appBarHome.fabCounter.setText(String.valueOf(cartItems));
         });
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -206,8 +207,16 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+//    public void UpdateCardNumber(){
+//        int cartItems = CardAdapter.getCartNames().size();
+//        binding.appBarHome.fabCounter.setText(String.valueOf(cartItems));
+//
+//    }
 
     private void purchaseOnClick(View v) throws JSONException, IOException {
+
+        //short snackbar to say please login to purchase
+
 
         if (authState == null || !authState.isAuthorized()) {
                             Snackbar.make(v, "Please login to purchase", Snackbar.LENGTH_LONG)
@@ -478,4 +487,7 @@ public class HomeActivity extends AppCompatActivity {
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         customTabsIntent.launchUrl(context, Uri.parse(MYACCOUNT_ENDPOINT));
     }
+
 }
+
+

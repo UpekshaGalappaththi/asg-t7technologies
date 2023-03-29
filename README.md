@@ -1,4 +1,3 @@
-
 # KfoneStore
 
 This project implementation bases upon a telecommunications company, Kfone, that provides telecom and digital services and products to its customers. The implement scenario is given below and the implementation was completed with the following technology stack.
@@ -9,35 +8,36 @@ This project implementation bases upon a telecommunications company, Kfone, that
 - [Fly](https://fly.io/) - As a hosting platform for the back-end service.
 
 ## Table of Contents
-* [Kfone Consumer Application Requirement Discussion  ](#kfone-consumer-application-requirement-discussion)
-  + [Requirement 1 - Window shopping  ](#requirement-1-window-shopping)
-  + [Requirement 2 - Integrating Asgardeo with the Application  ](#requirement-2-integrating-asgardeo-with-the-application)
-  + [Requirement 3 - User being able to purchase devices or services  ](#requirement-3-user-being-able-to-purchase-devices-or-services)
-  + [Requirement 4 - Progressive Profiling ](#requirement-4-progressive-profiling)
-  + [Requirement 4 - Recovery](#requirement-4-recovery)
-* [Architecture](#architecture)
-* [Configuring the Project locally](#configuring-the-project-locally)
-  + [Prerequisites to be installed](#prerequisites-to-be-installed)
-  + [Configure Asgardeo](#configure-asgardeo)
-  + [Build & Deploy](#build-deploy)
+
+- [Kfone Consumer Application Requirement Discussion ](#kfone-consumer-application-requirement-discussion)
+  - [Requirement 1 - Window shopping ](#requirement-1-window-shopping)
+  - [Requirement 2 - Integrating Asgardeo with the Application ](#requirement-2-integrating-asgardeo-with-the-application)
+  - [Requirement 3 - User being able to purchase devices or services ](#requirement-3-user-being-able-to-purchase-devices-or-services)
+  - [Requirement 4 - Progressive Profiling ](#requirement-4-progressive-profiling)
+  - [Requirement 4 - Recovery](#requirement-4-recovery)
+- [Architecture](#architecture)
+- [Configuring the Project locally](#configuring-the-project-locally)
+  - [Prerequisites to be installed](#prerequisites-to-be-installed)
+  - [Configure Asgardeo](#configure-asgardeo)
+  - [Build & Deploy](#build-deploy)
 
 ## Kfone Consumer Application Requirement Discussion
 
-Kfone wants to release an e-portal where customers can browse and purchase devices and services online. At Kfone, you  want to secure access to this application, allowing your customers to register and consume services. You may want your customers to be able to manage their accounts, log in to the app, and secure their accounts with MFA. For that, you will use Asgardeo as your Customer Identity & Access Management (CIAM) solution to offload your burden of managing users and handling logins, registrations, and verifying email details.
+Kfone wants to release an e-portal where customers can browse and purchase devices and services online. At Kfone, you want to secure access to this application, allowing your customers to register and consume services. You may want your customers to be able to manage their accounts, log in to the app, and secure their accounts with MFA. For that, you will use Asgardeo as your Customer Identity & Access Management (CIAM) solution to offload your burden of managing users and handling logins, registrations, and verifying email details.
 
-*Devices for sale:*
+_Devices for sale:_
 
 - Smartphones: Smartphones are a key product category for telecom device sellers, with a wide range of options available from popular brands such as Apple, Samsung, and Google.
 - Tablets: Tablets are another popular product category that could be sold through a telecom device selling application, with options ranging from basic models to high-end devices designed for productivity and entertainment.
 - Wearable devices: Wearable devices such as smartwatches and fitness trackers have become increasingly popular in recent years, and could be a valuable product category for a telecom device-selling application.
 
-*Services for sale:*
+_Services for sale:_
 
 - Wireless services: One of the core services offered by telecommunications companies is wireless services, including mobile phone plans and data plans. These plans could include features such as unlimited talk and text, data rollover, and family plans.
 - Internet services: Another key service offered by telecommunications companies is internet services, including home broadband and mobile data plans.
 - Cloud services: With more businesses moving their operations to the cloud, telecommunications companies can offer cloud-based services such as cloud storage, backup, and disaster recovery.
 
-*Kfone loyalty programme*
+_Kfone loyalty programme_
 
 Kfone loyalty program has three tiers: Silver, Gold, and Platinum. Customers earn points based on their monthly spending on the telecom provider's services or device purchaces. The number of points earned determines the customer's tier level. A new customers who haven’t attained any tier levels earn 0.5 point for every $1 spent.
 
@@ -49,19 +49,19 @@ Each tier level offers different rewards and benefits. Here are some examples:
 
 ### Requirement 1 - Window shopping
 
-The Kfone store should display available mobile phones and services to web visitors without requiring them to log in. A  sample set of devices are available as  a [GitHub Gist](https://gist.github.com/ayshsandu/1768aa1f4a349dc77e086bfc40efedd2).
+The Kfone store should display available mobile phones and services to web visitors without requiring them to log in. A sample set of devices are available as a [GitHub Gist](https://gist.github.com/ayshsandu/1768aa1f4a349dc77e086bfc40efedd2).
 
 - Visitors will see sign-in and sign-up options, but purchasing without logging in should be possible.
 - The necessary services should be implemented to enable the listing of available devices and services in the UI.
 
-Note: Ideally in this kind of e-store, users should be able to purchase without login. During the scope of this project,  you don’t have to implement it. The "Add to cart" option can be disabled or prompt users to log in before adding to cart.
+Note: Ideally in this kind of e-store, users should be able to purchase without login. During the scope of this project, you don’t have to implement it. The "Add to cart" option can be disabled or prompt users to log in before adding to cart.
 
 ### Requirement 2 - Integrating Asgardeo with the Application
 
 During sign-up, users can use email/password or social media accounts to create their accounts. Existing users can log  
 in with their username/password or social media accounts. Once logged in, users can buy items or purchase services.
 
-- The login options used in this application were:  Username/password, [Google](https://wso2.com/asgardeo/docs/guides/authentication/social-login/add-google-login/), [Passkey](https://wso2.com/asgardeo/docs/guides/authentication/passwordless-login/add-passwordless-login-with-fido/).
+- The login options used in this application were: Username/password, [Google](https://wso2.com/asgardeo/docs/guides/authentication/social-login/add-google-login/), [Passkey](https://wso2.com/asgardeo/docs/guides/authentication/passwordless-login/add-passwordless-login-with-fido/).
 
 ### Requirement 3 - User being able to purchase devices or services
 
@@ -103,6 +103,12 @@ The overall architecture level request flow of this project is depicted in the d
 ### Configure Asgardeo
 
 - Login to the [Asgardeo Console](console.asgardeo.io/).
+- Create a Management application to use for this application. You can find more infromation about how to configure it [Here](https://wso2.com/asgardeo/docs/guides/applications/register-standard-based-app/#register-an-application).
+- Select the Public Client Option.
+- Enter the Authorized redirect URL as 'com.t7.consumer://callback'.
+- Under 'PKCE' select 'Mandatory'
+- Under 'Access Token' select 'JWT'
+- Update the Application
 
 ### Build & Deploy
 
@@ -114,9 +120,9 @@ git clone https://github.com/janakamarasena/asg-t7technologies.git
 
 - Open the cloned repository and navigate to the root folder.
 - The **T7Consumer** directory contains the android application while the **T7ConsumerBackend** directory contains the spring boot application.
--  To build and deploy the back-end you can follow the steps mentioned below.
-  - Navigate to the **T7ConsumerBackend** directory, change the name of the organization in the `SCIM_ME_API_ENDPOINT` variable under the file `KfoneStoreConsumerConstants.java` from `t7technologies` to your organization name and execute the command `mvn install` to build the back-end.
-  - Afterwards you can follow the steps mentioned at [Fly](https://fly.io/docs/languages-and-frameworks/dockerfile/) to deploy and host the back-end. **Note that a Dockerfile is already available in this repository so you do not need to create one**. If you require, you can also run it locally using the command `mvn spring-boot:run`.
+- To build and deploy the back-end you can follow the steps mentioned below.
+- Navigate to the **T7ConsumerBackend** directory, change the name of the organization in the `SCIM_ME_API_ENDPOINT` variable under the file `KfoneStoreConsumerConstants.java` from `t7technologies` to your organization name and execute the command `mvn install` to build the back-end.
+- Afterwards you can follow the steps mentioned at [Fly](https://fly.io/docs/languages-and-frameworks/dockerfile/) to deploy and host the back-end. **Note that a Dockerfile is already available in this repository so you do not need to create one**. If you require, you can also run it locally using the command `mvn spring-boot:run`.
 - To build and run the android application, you can follow the steps below.
   - Navigate to the **T7Consumer** directory, change the name of the Asgardeo organization from `t7technologies` to your organization name in all the occurrences inside the `build.gradle` file. Additionally, you should also change the Asgardeo client id and the API endpoints in the same file to match the back-end hosted URL (The path for devices endpoint is `/devices` and `/purchase` for purchase). Note that you can front the back-end using [AWS API Gateway](https://aws.amazon.com/api-gateway/) if you require so.
   - Afterwards, you can [run the Android application](https://developer.android.com/studio/run) as you normally would.
