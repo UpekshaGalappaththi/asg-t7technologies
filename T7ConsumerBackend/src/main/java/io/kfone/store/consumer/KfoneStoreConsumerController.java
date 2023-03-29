@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -144,6 +145,54 @@ public class KfoneStoreConsumerController {
                     KfoneStoreConsumerConstants.TIER_PLACEHOLDER_KEY, tier).replace(
                     KfoneStoreConsumerConstants.POINTS_PLACEHOLDER_KEY, String.valueOf(points));
 
+            responseEntity = KfoneStoreConsumerUtils.callSCIMMeEndpoint(authHeader, HttpMethod.PATCH, scimRequestBody);
+        }
+
+        return responseEntity;
+    }
+
+    @PatchMapping("/set-attribute")
+    @ResponseBody
+    public ResponseEntity<String> setAttribute(@RequestHeader(KfoneStoreConsumerConstants.AUTHORIZATION_KEY)
+                                               String authHeader, @RequestBody JsonNode requestBody) {
+
+        // Extract the attributes from the request.
+        String attribute = "";
+        String value = "";
+        if (requestBody.has(KfoneStoreConsumerConstants.ATTRIBUTE_PARAM_NAME) && requestBody.has(
+                KfoneStoreConsumerConstants.VALUE_PARAM_NAME)) {
+            if (StringUtils.isNotBlank(requestBody.get(KfoneStoreConsumerConstants.ATTRIBUTE_PARAM_NAME).toString()) &&
+                    StringUtils.isNotBlank(requestBody.get(KfoneStoreConsumerConstants.VALUE_PARAM_NAME).toString())) {
+                attribute = requestBody.get(KfoneStoreConsumerConstants.ATTRIBUTE_PARAM_NAME).asText();
+                value = requestBody.get(KfoneStoreConsumerConstants.VALUE_PARAM_NAME).asText();
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(String.format("The attribute and value extracted from the request body is %s, %s.",
+                        attribute, value));
+            }
+        } else {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("The request body did not contain the attribute and/or the value parameter/s hence " +
+                        "returning a response stating that this is a bad request.");
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not find the attribute and/or the value " +
+                    "parameter/s in the body.");
+        }
+
+        ResponseEntity<String> responseEntity = ResponseEntity.status(HttpStatus.OK).body(
+                "User was not updated since the attribute and/or value was insufficient or the value sent as " +
+                        "attribute and/or value was not in a proper format.");
+
+        if (StringUtils.isNotBlank(attribute) && StringUtils.isNotBlank(value)) {
+            // Update the user details with an SCIM Me API call.
+            String scimRequestBody;
+            if (attribute.equals(KfoneStoreConsumerConstants.ADDRESS_KEY)) {
+                scimRequestBody = KfoneStoreConsumerConstants.SCIM_ME_ADDRESS_PATCH_REQUEST_BODY.replace(
+                        KfoneStoreConsumerConstants.ADDRESS_PLACEHOLDER_KEY, value);
+            } else {
+                scimRequestBody = KfoneStoreConsumerConstants.SCIM_ME_FIRST_NAME_PATCH_REQUEST_BODY.replace(
+                        KfoneStoreConsumerConstants.FIRST_NAME_PLACEHOLDER_KEY, value);
+            }
             responseEntity = KfoneStoreConsumerUtils.callSCIMMeEndpoint(authHeader, HttpMethod.PATCH, scimRequestBody);
         }
 

@@ -8,8 +8,13 @@ public class KfoneStoreConsumerConstants {
     public static final String FILE_PATH_DEVICE_INFORMATION = "/devices.json";
     public static final String TOTAL_PARAM_NAME = "total";
     public static final String POINTS_PARAM_NAME = "points";
+    public static final String ATTRIBUTE_PARAM_NAME = "attribute";
+    public static final String VALUE_PARAM_NAME = "value";
+    public static final String ADDRESS_KEY = "address";
     public static final String TIER_PLACEHOLDER_KEY = "tier-placeholder";
     public static final String POINTS_PLACEHOLDER_KEY = "points-placeholder";
+    public static final String FIRST_NAME_PLACEHOLDER_KEY = "first-name-placeholder";
+    public static final String ADDRESS_PLACEHOLDER_KEY = "address-placeholder";
     public static final String CONTENT_TYPE_KEY = "Content-Type";
     public static final String CONTENT_TYPE_VALUE = "application/json";
     public static final String AUTHORIZATION_KEY = "Authorization";
@@ -29,6 +34,45 @@ public class KfoneStoreConsumerConstants {
                                 "tier": "tier-placeholder",
                                 "points": "points-placeholder"
                               }
+                            }
+                          }
+                        ]
+                      }
+                    """;
+    public static final String SCIM_ME_FIRST_NAME_PATCH_REQUEST_BODY =
+            """
+                      {
+                        "schemas": [
+                          "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+                        ],
+                        "Operations": [
+                             {
+                               "op": "replace",
+                               "value": {
+                                 "name": {
+                                   "givenName": "first-name-placeholder"
+                                 }
+                               }
+                             }
+                        ]
+                      }
+                    """;
+    public static final String SCIM_ME_ADDRESS_PATCH_REQUEST_BODY =
+            """
+                      {
+                        "schemas": [
+                          "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+                        ],
+                        "Operations": [
+                          {
+                            "op": "replace",
+                            "value": {
+                              "addresses": [
+                                {
+                                  "streetAddress": "address-placeholder",
+                                  "type": "home"
+                                }
+                              ]
                             }
                           }
                         ]
