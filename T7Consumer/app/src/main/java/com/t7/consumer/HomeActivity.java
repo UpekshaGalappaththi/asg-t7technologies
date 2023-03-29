@@ -209,15 +209,36 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        View headerView = navigationView.getHeaderView(0);
+        TextView textViewVerified = headerView.findViewById(R.id.tvVerified);
+        //add onclick listener to tvUsername
+        textViewVerified.setOnClickListener(v -> {
+            // add alert dialog  with a message "Please verify your email address" with action buttons "Resend" and "Cancel". Add onclick listeners to the buttons.
+            // on click of "Resend" button, call the resendVerificationCode() method.
+            // on click of "Cancel" button, dismiss the alert dialog.
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Please verify your email address")
+                    .setCancelable(false)
+                    .setPositiveButton("Resend", (dialog, id) -> {
+//                                    resendVerificationCode();
+                        dialog.dismiss();
 
+                    })
+                    .setNegativeButton("Cancel", (dialog, id) -> {
+                        dialog.dismiss();
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        });
 
 
         navigationView.setNavigationItemSelectedListener(menuItem -> setNavigationItemSelection(menuItem.getItemId()));
 
 
-        updateUI();
         initAuth();
         handleAuthCallback(getIntent());
+        updateUI();
+
 
     }
 
@@ -423,39 +444,39 @@ private void resendVerificationCode() {
         if (!isVerified[0] && authState != null && authState.isAuthorized() && authState.getParsedIdToken().additionalClaims.get(EMAIL_VERIFIED) != null) {
             isVerified[0] = (boolean) authState.getParsedIdToken().additionalClaims.get(EMAIL_VERIFIED);
         }
-        if (!isVerified[0]) {
-            // call user info endpoint to get email_verified
-            authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
-                @Override
-                public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
-                    if (exception != null) {
-                        // handle error
-                        throw new RuntimeException(exception);
-                    } else {
-                        // use access token
-                        // call url with access token handle exception
-                        OkHttpClient client = new OkHttpClient();
-                        Request request = new Request.Builder()
-                                .url(USERINFO_ENDPOINT)
-                                .addHeader("Authorization", "Bearer " + accessToken)
-                                .build();
-                        try (Response response = client.newCall(request).execute()) {
-                            if (response.isSuccessful()) {
-                                // handle success
-                                JSONObject jsonObject = new JSONObject(response.body().string());
-                                isVerified[0] = jsonObject.getBoolean(EMAIL_VERIFIED);
-                                saveEmailVerified();
-                            } else {
-                                // handle error
-                                System.out.println("isEmailVerified() error");
-                            }
-                        } catch (IOException | JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            });
-        }
+//        if (!isVerified[0]) {
+//            // call user info endpoint to get email_verified
+//            authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
+//                @Override
+//                public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+//                    if (exception != null) {
+//                        // handle error
+//                        throw new RuntimeException(exception);
+//                    } else {
+//                        // use access token
+//                        // call url with access token handle exception
+//                        OkHttpClient client = new OkHttpClient();
+//                        Request request = new Request.Builder()
+//                                .url(USERINFO_ENDPOINT)
+//                                .addHeader("Authorization", "Bearer " + accessToken)
+//                                .build();
+//                        try (Response response = client.newCall(request).execute()) {
+//                            if (response.isSuccessful()) {
+//                                // handle success
+//                                JSONObject jsonObject = new JSONObject(response.body().string());
+//                                isVerified[0] = jsonObject.getBoolean(EMAIL_VERIFIED);
+//                                saveEmailVerified();
+//                            } else {
+//                                // handle error
+//                                System.out.println("isEmailVerified() error");
+//                            }
+//                        } catch (IOException | JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                }
+//            });
+//        }
 
         return isVerified[0];
     }
@@ -471,43 +492,43 @@ private void resendVerificationCode() {
             if (!isAddressAvailable[0] && authState != null && authState.isAuthorized() && authState.getParsedIdToken().additionalClaims.get(ADDRESS) != null) {
                  isAddressAvailable[0] = true;
             }
-            if (!isAddressAvailable[0]) {
-                // call user info endpoint to get email_verified
-                authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
-                    @Override
-                    public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
-                        if (exception != null) {
-                            // handle error
-                            throw new RuntimeException(exception);
-                        } else {
-                            // use access token
-                            // call url with access token handle exception
-                            OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder()
-                                    .url(USERINFO_ENDPOINT)
-                                    .addHeader("Authorization", "Bearer " + accessToken)
-                                    .build();
-                            try (Response response = client.newCall(request).execute()) {
-                                if (response.isSuccessful()) {
-                                    // handle success
-                                    JSONObject jsonObject = new JSONObject(response.body().string());
-                                    String address = jsonObject.getString(ADDRESS);
-                                    if (address != null) {
-                                        isAddressAvailable[0] = true;
-                                        saveAddress(address);
-
-                                    }
-                                } else {
-                                    // handle error
-                                    System.out.println("error getting address");
-                                }
-                            } catch (IOException | JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
-                });
-            }
+//            if (!isAddressAvailable[0]) {
+//                // call user info endpoint to get email_verified
+//                authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
+//                    @Override
+//                    public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+//                        if (exception != null) {
+//                            // handle error
+//                            throw new RuntimeException(exception);
+//                        } else {
+//                            // use access token
+//                            // call url with access token handle exception
+//                            OkHttpClient client = new OkHttpClient();
+//                            Request request = new Request.Builder()
+//                                    .url(USERINFO_ENDPOINT)
+//                                    .addHeader("Authorization", "Bearer " + accessToken)
+//                                    .build();
+//                            try (Response response = client.newCall(request).execute()) {
+//                                if (response.isSuccessful()) {
+//                                    // handle success
+//                                    JSONObject jsonObject = new JSONObject(response.body().string());
+//                                    String address = jsonObject.getString(ADDRESS);
+//                                    if (address != null) {
+//                                        isAddressAvailable[0] = true;
+//                                        saveAddress(address);
+//
+//                                    }
+//                                } else {
+//                                    // handle error
+//                                    System.out.println("error getting address");
+//                                }
+//                            } catch (IOException | JSONException e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                        }
+//                    }
+//                });
+//            }
 
             return isAddressAvailable[0];
 
