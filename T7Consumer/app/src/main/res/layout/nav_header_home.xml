@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
@@ -12,35 +13,78 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:id="@+id/ivProfilePic"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:contentDescription="@string/nav_header_desc"
-
-        android:scaleType="centerInside"
-        app:srcCompat="@mipmap/ic_launcher_round" />
-
-    <TextView
-        android:id="@+id/tvFullName"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/nav_header_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle"
-        />
+        <ImageView
+            android:id="@+id/ivProfilePic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="329dp"
 
-    <TextView
-        android:id="@+id/tvTierData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="[ Tier:Default (Points:100) ]"
-        />
+            android:contentDescription="@string/nav_header_desc"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toTopOf="@+id/tvFullName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
+        <TextView
+            android:id="@+id/tvFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/nav_header_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintBottom_toTopOf="@+id/tvUsername"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivProfilePic" />
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="1dp"
+            android:text="@string/nav_header_subtitle"
+            app:layout_constraintBottom_toTopOf="@+id/tvTierData"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvFullName" />
+
+        <TextView
+            android:id="@+id/tvVerified"
+            android:layout_width="45dp"
+            android:layout_height="19dp"
+            android:layout_marginEnd="76dp"
+            android:background="#F44336"
+            android:text="verify"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.289"
+            app:layout_constraintStart_toEndOf="@+id/tvUsername"
+            app:layout_constraintTop_toTopOf="@+id/tvUsername"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvTierData"
+            android:layout_width="228dp"
+            android:layout_height="19dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="21dp"
+            android:layout_marginBottom="9dp"
+            android:text="[ Tier:Default (Points:100) ]"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

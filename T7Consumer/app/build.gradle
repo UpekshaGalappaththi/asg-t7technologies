@@ -14,6 +14,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "CLIENT_ID", "\"rGdUjiBMxSaLJpPGefj96ULJxdEa\"")
+        buildConfigField("String", "REDIRECT_URI", "\"com.t7.consumer://callback\"")
+        buildConfigField("String", "SCOPES", "\"openid address email loyalty profile internal_login\"")
+        buildConfigField("String", "TOKEN_ENDPOINT", "\"https://api.asgardeo.io/t/t7technologies/oauth2/token\"")
+        buildConfigField("String", "AUTHORIZATION_ENDPOINT", "\"https://api.asgardeo.io/t/t7technologies/oauth2/authorize\"")
+        buildConfigField("String", "LOGOUT_ENDPOINT", "\"https://api.asgardeo.io/t/t7technologies/oidc/logout\"")
+        buildConfigField("String", "MYACCOUNT_ENDPOINT", "\"https://myaccount.asgardeo.io/t/t7technologies\"")
+        buildConfigField("String", "USERINFO_ENDPOINT", "\"https://api.asgardeo.io/t/t7technologies/oauth2/userinfo\"")
     }
 
     buildTypes {

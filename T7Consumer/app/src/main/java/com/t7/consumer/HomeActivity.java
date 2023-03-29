@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,23 +64,36 @@ import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
+    public static final String EMAIL_VERIFIED = "email_verified";
+    public static final String ADDRESS = "street_address";
     private AuthorizationService authorizationService;
     private AuthorizationRequest authorizationRequest;
     private AuthorizationServiceConfiguration authorizationServiceConfiguration;
     private String authStateJson;
     private AuthState authState;
 
-    private static final String CLIENT_ID = "rGdUjiBMxSaLJpPGefj96ULJxdEa";
-    private static final String REDIRECT_URI = "com.t7.consumer://callback";
-    private static final String SCOPES = "openid profile internal_login loyalty";
+//    private static final String CLIENT_ID = "rGdUjiBMxSaLJpPGefj96ULJxdEa";
+//    private static final String REDIRECT_URI = "com.t7.consumer://callback";
+//    private static final String SCOPES = "openid profile internal_login loyalty";
     private static final String SHARED_PREFERENCES_NAME = "t7_my_prefs";
     private static final String AUTH_STATE = "auth_state";
+    private static final String EMAIL_VERIFIED_STATE = "email_verified_state";
     private static final String TAG = "HomeActivity";
-    private static final String TOKEN_ENDPOINT = "https://api.asgardeo.io/t/t7technologies/oauth2/token";
-    private static final String AUTHORIZATION_ENDPOINT = "https://api.asgardeo.io/t/t7technologies/oauth2/authorize";
-    private static final String LOGOUT_ENDPOINT = "https://api.asgardeo.io/t/t7technologies/oidc/logout";
-    private static final String MYACCOUNT_ENDPOINT = "https://myaccount.asgardeo.io/t/t7technologies";
+//    private static final String TOKEN_ENDPOINT = "https://api.asgardeo.io/t/t7technologies/oauth2/token";
+//    private static final String AUTHORIZATION_ENDPOINT = "https://api.asgardeo.io/t/t7technologies/oauth2/authorize";
+//    private static final String LOGOUT_ENDPOINT = "https://api.asgardeo.io/t/t7technologies/oidc/logout";
+//    private static final String MYACCOUNT_ENDPOINT = "https://myaccount.asgardeo.io/t/t7technologies";
 
+
+    private static final String CLIENT_ID = BuildConfig.CLIENT_ID;
+    private static final String REDIRECT_URI = BuildConfig.REDIRECT_URI;
+    private static final String SCOPES = BuildConfig.SCOPES;
+    private static final String TOKEN_ENDPOINT = BuildConfig.TOKEN_ENDPOINT;
+    private static final String AUTHORIZATION_ENDPOINT = BuildConfig.AUTHORIZATION_ENDPOINT;
+    private static final String LOGOUT_ENDPOINT = BuildConfig.LOGOUT_ENDPOINT;
+    private static final String MYACCOUNT_ENDPOINT = BuildConfig.MYACCOUNT_ENDPOINT;
+    private static final String BE_PROTECTED_EP_BASE = "BuildConfig.USERINFO_ENDPOINT";
+    private static final String USERINFO_ENDPOINT = BuildConfig.USERINFO_ENDPOINT;
     private static final String PURCHASE_ENDPOINT = "https://331gmgq1ba.execute-api.eu-north-1.amazonaws.com/purchase";
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -91,9 +106,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         loadAuthState();
-
-
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -101,8 +115,92 @@ public class HomeActivity extends AppCompatActivity {
         binding.appBarHome.fab.setOnClickListener(view -> {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-            ArrayList<String> cartNames = CardAdapter.getCartNames();
-            ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+
+            counter++;
+            binding.appBarHome.fabCounter.setText(String.valueOf(counter));
+
+        });
+
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home)
+                .setOpenableLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView textViewVerified = headerView.findViewById(R.id.tvVerified);
+        //add onclick listener to tvUsername
+        textViewVerified.setOnClickListener(v -> {
+            // add alert dialog  with a message "Please verify your email address" with action buttons "Resend" and "Cancel". Add onclick listeners to the buttons.
+            // on click of "Resend" button, call the resendVerificationCode() method.
+            // on click of "Cancel" button, dismiss the alert dialog.
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setMessage("Please verify your email address")
+                                .setCancelable(false)
+                                .setPositiveButton("Resend", (dialog, id) -> {
+//                                    resendVerificationCode();
+                                    dialog.dismiss();
+
+                                })
+                                .setNegativeButton("Cancel", (dialog, id) -> {
+                                    dialog.dismiss();
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    });
+
+        navigationView.setNavigationItemSelectedListener(menuItem -> setNavigationItemSelection(menuItem.getItemId()));
+
+
+        updateUI();
+        initAuth();
+        handleAuthCallback(getIntent());
+//        Button btnProfile = findViewById(R.id.btnProfile);
+//        btnProfile.setOnClickListener(v -> openProfile(v.getContext()));
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+
+        String json = null;
+        try {
+            json = getJsonResponse();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Gson gson = new Gson();
+        CardItem[] products = gson.fromJson(json, CardItem[].class);
+        List<CardItem> cardList = Arrays.asList(products);
+        adapter = new CardAdapter(cardList);
+        recyclerView.setAdapter(adapter);
+
+        // in the activity's Java file
+
+        Button cartButton = findViewById(R.id.viewCartButton);
+
+        cartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // actions to take when the button is clicked
+//                ArrayList<String> cartNames = CardAdapter.getCartNames();
+//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+//
+//                System.out.println(cartNames);
+//                System.out.println(cartPrices);
+
+//                Intent intent = new Intent(HomeActivity.this, CartView.class);
+//                startActivity(intent);
+//
+//            }
+                ArrayList<String> cartNames = CardAdapter.getCartNames();
+                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             StringBuilder stringBuilder = new StringBuilder();
@@ -245,6 +343,42 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    // create a method resendVerificationCode() call the BE_PROTECTED_EP_BASE_URL + "/resendVerificationCode" endpoint with the access token
+private void resendVerificationCode() {
+        authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
+            @Override
+            public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+                if (exception != null) {
+                    // handle error
+                    throw new RuntimeException(exception);
+                } else {
+                    // use access token
+                    // call url with access token handle exception
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url(BE_PROTECTED_EP_BASE + "/resendVerificationCode")
+                            .addHeader("Authorization", "Bearer " + accessToken)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        if (response.isSuccessful()) {
+                            // handle success
+                           //hide
+                            // hide tvVerified button
+                            // show tvNotVerified button
+
+
+
+                        } else {
+                            // handle error
+                            System.out.println("resendVerificationCode() error");
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+}
 
     Void postPurchase(String url, String json) throws IOException {
 
@@ -334,8 +468,130 @@ public class HomeActivity extends AppCompatActivity {
         authStateJson = authState == null ? null : authState.jsonSerializeString();
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         preferences.edit().putString(AUTH_STATE, authStateJson).apply();
+        if (authState != null && authState.isAuthorized() && authState.getParsedIdToken().additionalClaims.get(EMAIL_VERIFIED) != null) {
+           if((boolean) authState.getParsedIdToken().additionalClaims.get(EMAIL_VERIFIED)){
+               saveEmailVerified();
+           }
+        }
+
+        if (authState != null && authState.isAuthorized() && authState.getParsedIdToken().additionalClaims.get(ADDRESS) != null) {
+           String address = authState.getParsedIdToken().additionalClaims.get(EMAIL_VERIFIED)
+               saveAddress(address);
+        }
     }
 
+    private void saveEmailVerified() {
+
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        preferences.edit().putBoolean(EMAIL_VERIFIED_STATE, true).apply();
+    }
+
+    private void saveAddress(String address) {
+
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        preferences.edit().putString(ADDRESS, address).apply();
+    }
+
+    // get the emailVerified state from SharedPreferences
+    private boolean isEmailVerified() {
+
+        final boolean[] isVerified = {false};
+
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        isVerified[0] = preferences.getBoolean(EMAIL_VERIFIED_STATE, false);
+        //check if exists and get email_verified value from idToken
+        if (!isVerified[0] && authState != null && authState.isAuthorized() && authState.getParsedIdToken().additionalClaims.get(EMAIL_VERIFIED) != null) {
+            isVerified[0] = (boolean) authState.getParsedIdToken().additionalClaims.get(EMAIL_VERIFIED);
+        }
+        if (!isVerified[0]) {
+            // call user info endpoint to get email_verified
+            authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
+                @Override
+                public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+                    if (exception != null) {
+                        // handle error
+                        throw new RuntimeException(exception);
+                    } else {
+                        // use access token
+                        // call url with access token handle exception
+                        OkHttpClient client = new OkHttpClient();
+                        Request request = new Request.Builder()
+                                .url(USERINFO_ENDPOINT)
+                                .addHeader("Authorization", "Bearer " + accessToken)
+                                .build();
+                        try (Response response = client.newCall(request).execute()) {
+                            if (response.isSuccessful()) {
+                                // handle success
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                isVerified[0] = jsonObject.getBoolean(EMAIL_VERIFIED);
+                                saveEmailVerified();
+                            } else {
+                                // handle error
+                                System.out.println("isEmailVerified() error");
+                            }
+                        } catch (IOException | JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
+        }
+
+        return isVerified[0];
+    }
+
+    private boolean isAddressAvailable() {
+
+            final boolean[] isVerified = {false};
+        final boolean[] isAddressAvailable = {false};
+
+            SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+            isAddressAvailable[0] = preferences.getBoolean(ADDRESS, false);
+            //check if exists and get email_verified value from idToken
+            if (!isAddressAvailable[0] && authState != null && authState.isAuthorized() && authState.getParsedIdToken().additionalClaims.get(ADDRESS) != null) {
+                 isAddressAvailable[0] = true;
+            }
+            if (!isAddressAvailable[0]) {
+                // call user info endpoint to get email_verified
+                authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
+                    @Override
+                    public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+                        if (exception != null) {
+                            // handle error
+                            throw new RuntimeException(exception);
+                        } else {
+                            // use access token
+                            // call url with access token handle exception
+                            OkHttpClient client = new OkHttpClient();
+                            Request request = new Request.Builder()
+                                    .url(USERINFO_ENDPOINT)
+                                    .addHeader("Authorization", "Bearer " + accessToken)
+                                    .build();
+                            try (Response response = client.newCall(request).execute()) {
+                                if (response.isSuccessful()) {
+                                    // handle success
+                                    JSONObject jsonObject = new JSONObject(response.body().string());
+                                    String address = jsonObject.getString(ADDRESS);
+                                    if (address != null) {
+                                        isAddressAvailable[0] = true;
+                                        saveAddress(address);
+
+                                    }
+                                } else {
+                                    // handle error
+                                    System.out.println("error getting address");
+                                }
+                            } catch (IOException | JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                });
+            }
+
+            return isAddressAvailable[0];
+
+    }
     private void loadAuthState() {
 
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -392,11 +648,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void updateBasicUserInfoInHeader() {
+
         NavigationView navigationView = binding.navView;
         View headerView = navigationView.getHeaderView(0);
         TextView textViewUsername = headerView.findViewById(R.id.tvUsername);
         TextView textViewFullName = headerView.findViewById(R.id.tvFullName);
         TextView textViewTierData = headerView.findViewById(R.id.tvTierData);
+        TextView textViewVerified = headerView.findViewById(R.id.tvVerified);
+        ImageView imageView =  headerView.findViewById(R.id.ivProfilePic);
+
         if (authState != null && authState.isAuthorized()) {
 
             textViewUsername.setText(authState.getParsedIdToken().additionalClaims.get("username").toString());
@@ -405,26 +665,38 @@ public class HomeActivity extends AppCompatActivity {
             textViewFullName.setText(authState.getParsedIdToken().additionalClaims.get("given_name").toString()
                     + " " + authState.getParsedIdToken().additionalClaims.get("family_name").toString());
 
-            ImageView imageView =  headerView.findViewById(R.id.ivProfilePic);
             Glide.with(this)
                     .load(authState.getParsedIdToken().additionalClaims.get("profile").toString())
                     .into(imageView);
 
-            textViewTierData.setText("[ Tier:" + authState.getParsedIdToken().additionalClaims.get("tier").toString()
-                    + " (Points:" + authState.getParsedIdToken().additionalClaims.get("points").toString() + ") ]");
+            textViewTierData.setText(authState.getParsedIdToken().additionalClaims.get("tier").toString()
+                    + " (Points:" + authState.getParsedIdToken().additionalClaims.get("points").toString() + ")");
 
+
+            if (isEmailVerified()) {
+                textViewVerified.setVisibility(View.GONE);
+            } else {
+                textViewVerified.setText("verify");
+                textViewVerified.setVisibility(View.VISIBLE);
+                textViewVerified.setPaintFlags(textViewVerified.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            }
             // make visible TextViews textViewUsername, textViewFullName, textViewTierData
             textViewUsername.setVisibility(View.VISIBLE);
             textViewFullName.setVisibility(View.VISIBLE);
             textViewTierData.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
 
         } else {
             // hide TextViews textViewUsername, textViewFullName, textViewTierData
             textViewUsername.setVisibility(View.GONE);
             textViewFullName.setVisibility(View.GONE);
             textViewTierData.setVisibility(View.GONE);
+            textViewVerified.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
         }
     }
+
+
 
     private void promptLogin() {
 
@@ -487,6 +759,71 @@ public class HomeActivity extends AppCompatActivity {
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         customTabsIntent.launchUrl(context, Uri.parse(MYACCOUNT_ENDPOINT));
     }
+
+    private void updateAddress() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter your address:");
+
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        builder.setPositiveButton("Update", (dialog, which) -> {
+            String address = input.getText().toString();
+
+            authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
+                @Override
+                public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+                    if (exception != null) {
+                        // handle error
+                        throw new RuntimeException(exception);
+                    } else {
+                        // use access token
+                        // call url with access token handle exception
+                        //create json object  "attribute": "first-name",
+                        //    "value": "The new first name"
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("attribute", "address");
+                            jsonObject.put("value", address);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // create requestbody with jsonobject
+                        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
+
+                        OkHttpClient client = new OkHttpClient();
+                        Request request = new Request.Builder()
+                                .url(BE_PROTECTED_EP_BASE + "/resendVerificationCode")
+                                .addHeader("Authorization", "Bearer " + accessToken)
+                                .post(body)
+                                .build();
+                        try (Response response = client.newCall(request).execute()) {
+                            if (response.isSuccessful()) {
+                                saveAddress(address);
+
+                            } else {
+                                // handle error
+                                System.out.println("Error updating address");
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
+
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+
+        //if (!isAddressAvailable()) {
+        //                updateAddress();
+        //            }
+    }
+
+
 
 }
 
