@@ -86,7 +86,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CardAdapter adapter;
 
-    int counter = 0;
+    int counter =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,16 +106,16 @@ public class HomeActivity extends AppCompatActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Name\t\tPrice\n");
+            stringBuilder.append("Name\t\t - Price (USD)\n\n");
 
             for (int i = 0; i < cartNames.size(); i++) {
-                stringBuilder.append(cartNames.get(i) + "\t\t" + cartPrices.get(i) + "\n");
+                stringBuilder.append(cartNames.get(i) + "\t\t - " + cartPrices.get(i) + "\n");
             }
             int totalPrice = 0;
             for (int i = 0; i < CardAdapter.priceArray.size(); i++) {
                 totalPrice += Integer.parseInt(CardAdapter.priceArray.get(i));
             }
-            stringBuilder.append("Total Price: " + totalPrice);
+            stringBuilder.append("\nTotal Price: " + totalPrice);
             builder.setMessage(stringBuilder.toString())
                     .setCancelable(false);
             builder.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
@@ -179,8 +179,9 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-            counter++;
-            binding.appBarHome.fabCounter.setText(String.valueOf(counter));
+//            counter++;
+//            int cartItems = CardAdapter.getCartNames().size();
+//            binding.appBarHome.fabCounter.setText(String.valueOf(cartItems));
         });
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -206,6 +207,11 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+//    public void UpdateCardNumber(){
+//        int cartItems = CardAdapter.getCartNames().size();
+//        binding.appBarHome.fabCounter.setText(String.valueOf(cartItems));
+//
+//    }
 
     private void purchaseOnClick(View v) throws JSONException, IOException {
 
@@ -478,4 +484,7 @@ public class HomeActivity extends AppCompatActivity {
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         customTabsIntent.launchUrl(context, Uri.parse(MYACCOUNT_ENDPOINT));
     }
+
 }
+
+
