@@ -123,7 +123,7 @@ public class HomeActivity extends AppCompatActivity {
                     // do something when the OK button is clicked
 
                     if (CardAdapter.nameArray.size() == 0) {
-                        Snackbar.make(view, "Cart is empty. Please add to cart to continue", Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(view, "Cart is empty. Please add to cart to continue", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         return;
                     }
@@ -134,11 +134,11 @@ public class HomeActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                     if(authState != null && authState.isAuthorized()){
-                        Snackbar.make(view, "Thank you for your purchase/n The order receipt has been sent to your email", Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(view, "Thank you for your purchase/n The order receipt has been sent to your email", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();}
                     else{
                         // snackbar to with action
-                        Snackbar.make(view, "Please login to purchase", Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(view, "Please login to purchase", Snackbar.LENGTH_LONG)
                                 .setAction("Login", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -159,7 +159,7 @@ public class HomeActivity extends AppCompatActivity {
                     CardAdapter.clearNameArray();
                     CardAdapter.clearPriceArray();
 
-                    Snackbar.make(view, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(view, "Cleared Cart", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
 
@@ -214,6 +214,9 @@ public class HomeActivity extends AppCompatActivity {
 //    }
 
     private void purchaseOnClick(View v) throws JSONException, IOException {
+
+        //short snackbar to say please login to purchase
+
 
         if (authState == null || !authState.isAuthorized()) {
                             Snackbar.make(v, "Please login to purchase", Snackbar.LENGTH_LONG)
