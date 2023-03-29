@@ -48,9 +48,9 @@ public class HomeActivity extends AppCompatActivity {
     private String authStateJson;
     private AuthState authState;
 
-    private static final String CLIENT_ID = "4GhNFXK1xtHEVPwRhvujZyMI5kYa";
+    private static final String CLIENT_ID = "rGdUjiBMxSaLJpPGefj96ULJxdEa";
     private static final String REDIRECT_URI = "com.t7.consumer://callback";
-    private static final String SCOPES = "openid profile internal_login";
+    private static final String SCOPES = "openid profile internal_login loyalty";
     private static final String SHARED_PREFERENCES_NAME = "t7_my_prefs";
     private static final String AUTH_STATE = "auth_state";
     private static final String TAG = "HomeActivity";
@@ -72,15 +72,12 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarHome.toolbar);
-        binding.appBarHome.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.appBarHome.fab.setOnClickListener(view -> {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
 
-                counter++;
-                binding.appBarHome.fabCounter.setText(String.valueOf(counter));
-            }
+            counter++;
+            binding.appBarHome.fabCounter.setText(String.valueOf(counter));
         });
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -112,7 +109,8 @@ public class HomeActivity extends AppCompatActivity {
 
         if (id == R.id.btnLogin) {
             loginOnClick();
-
+        } else if (id == R.id.btnProfile) {
+            openProfile(this);
         }
         DrawerLayout drawer1 = findViewById(R.id.drawer_layout);
         drawer1.closeDrawer(GravityCompat.START);
@@ -175,12 +173,9 @@ public class HomeActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
         }
-//        updateLoginButton();
     }
 
     private void updateLoginButton() {
-        // get btnLogin button
-
 
         NavigationView navigationView = binding.navView;
         Menu menu = navigationView.getMenu();
@@ -190,6 +185,19 @@ public class HomeActivity extends AppCompatActivity {
             loginMenuItem.setTitle("Login/Signup");
         } else {
             loginMenuItem.setTitle("Logout");
+        }
+    }
+
+    private void updateProfileButton() {
+
+        NavigationView navigationView = binding.navView;
+        Menu menu = navigationView.getMenu();
+        MenuItem profileMenuItem = menu.findItem(R.id.btnProfile);
+
+        if (authState == null || !authState.isAuthorized()) {
+            profileMenuItem.setVisible(false);
+        } else {
+            profileMenuItem.setVisible(true);
         }
     }
 
@@ -203,27 +211,42 @@ public class HomeActivity extends AppCompatActivity {
 
     private void updateUI() {
         updateLoginButton();
+        updateProfileButton();
         updateBasicUserInfoInHeader();
     }
 
     private void updateBasicUserInfoInHeader() {
-
+        NavigationView navigationView = binding.navView;
+        View headerView = navigationView.getHeaderView(0);
+        TextView textViewUsername = headerView.findViewById(R.id.tvUsername);
+        TextView textViewFullName = headerView.findViewById(R.id.tvFullName);
+        TextView textViewTierData = headerView.findViewById(R.id.tvTierData);
         if (authState != null && authState.isAuthorized()) {
-            NavigationView navigationView = binding.navView;
-            View headerView = navigationView.getHeaderView(0);
-            TextView textViewUsername = headerView.findViewById(R.id.tvUsername);
+
             textViewUsername.setText(authState.getParsedIdToken().additionalClaims.get("username").toString());
 
             //set given_name and family_name from idtoken to tvFullName
-            TextView textViewFullName = headerView.findViewById(R.id.tvFullName);
             textViewFullName.setText(authState.getParsedIdToken().additionalClaims.get("given_name").toString()
                     + " " + authState.getParsedIdToken().additionalClaims.get("family_name").toString());
 
             ImageView imageView =  headerView.findViewById(R.id.ivProfilePic);
-
             Glide.with(this)
                     .load(authState.getParsedIdToken().additionalClaims.get("profile").toString())
                     .into(imageView);
+
+            textViewTierData.setText("[ Tier:" + authState.getParsedIdToken().additionalClaims.get("tier").toString()
+                    + " (Points:" + authState.getParsedIdToken().additionalClaims.get("points").toString() + ") ]");
+
+            // make visible TextViews textViewUsername, textViewFullName, textViewTierData
+            textViewUsername.setVisibility(View.VISIBLE);
+            textViewFullName.setVisibility(View.VISIBLE);
+            textViewTierData.setVisibility(View.VISIBLE);
+
+        } else {
+            // hide TextViews textViewUsername, textViewFullName, textViewTierData
+            textViewUsername.setVisibility(View.GONE);
+            textViewFullName.setVisibility(View.GONE);
+            textViewTierData.setVisibility(View.GONE);
         }
     }
 
@@ -264,7 +287,6 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    //handle logout
     private void handleLogout() {
 
         String url = LOGOUT_ENDPOINT + "?id_token_hint=" + authState.getIdToken() + "&post_logout_redirect_uri=" + REDIRECT_URI;
@@ -274,18 +296,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         customTabsIntent.launchUrl(getApplicationContext(), Uri.parse(url));
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-//                .permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
-//        Request request = new Request.Builder()
-//                .url(url)
-//                .build();
-//
-//        try (Response response = client.newCall(request).execute()) {
-//            Log.d(TAG, response.body().string());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
         authState = null;
         saveAuthState();
         updateUI();

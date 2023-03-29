@@ -23,6 +23,8 @@ output.json
 *.iml
 /.idea/
 T7ConsumerBackend/.idea/
+T7Consumer/.idea/vcs.xml
+/.idea/vcs.xml
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml

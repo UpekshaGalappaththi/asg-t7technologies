@@ -28,5 +28,8 @@
         <item
             android:id="@+id/btnLogin"
             android:title="Login" />
+        <item
+            android:id="@+id/btnProfile"
+            android:title="Profile" />
     </group>
 </menu>

@@ -36,4 +36,11 @@
         android:text="@string/nav_header_subtitle"
         />
 
+    <TextView
+        android:id="@+id/tvTierData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[ Tier:Default (Points:100) ]"
+        />
+
 </LinearLayout>
