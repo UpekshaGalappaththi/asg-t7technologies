@@ -115,92 +115,8 @@ public class HomeActivity extends AppCompatActivity {
         binding.appBarHome.fab.setOnClickListener(view -> {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-
-            counter++;
-            binding.appBarHome.fabCounter.setText(String.valueOf(counter));
-
-        });
-
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-
-        View headerView = navigationView.getHeaderView(0);
-        TextView textViewVerified = headerView.findViewById(R.id.tvVerified);
-        //add onclick listener to tvUsername
-        textViewVerified.setOnClickListener(v -> {
-            // add alert dialog  with a message "Please verify your email address" with action buttons "Resend" and "Cancel". Add onclick listeners to the buttons.
-            // on click of "Resend" button, call the resendVerificationCode() method.
-            // on click of "Cancel" button, dismiss the alert dialog.
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setMessage("Please verify your email address")
-                                .setCancelable(false)
-                                .setPositiveButton("Resend", (dialog, id) -> {
-//                                    resendVerificationCode();
-                                    dialog.dismiss();
-
-                                })
-                                .setNegativeButton("Cancel", (dialog, id) -> {
-                                    dialog.dismiss();
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                    });
-
-        navigationView.setNavigationItemSelectedListener(menuItem -> setNavigationItemSelection(menuItem.getItemId()));
-
-
-        updateUI();
-        initAuth();
-        handleAuthCallback(getIntent());
-//        Button btnProfile = findViewById(R.id.btnProfile);
-//        btnProfile.setOnClickListener(v -> openProfile(v.getContext()));
-
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-
-        String json = null;
-        try {
-            json = getJsonResponse();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        Gson gson = new Gson();
-        CardItem[] products = gson.fromJson(json, CardItem[].class);
-        List<CardItem> cardList = Arrays.asList(products);
-        adapter = new CardAdapter(cardList);
-        recyclerView.setAdapter(adapter);
-
-        // in the activity's Java file
-
-        Button cartButton = findViewById(R.id.viewCartButton);
-
-        cartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // actions to take when the button is clicked
-//                ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-
-//                Intent intent = new Intent(HomeActivity.this, CartView.class);
-//                startActivity(intent);
-//
-//            }
-                ArrayList<String> cartNames = CardAdapter.getCartNames();
-                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+            ArrayList<String> cartNames = CardAdapter.getCartNames();
+            ArrayList<String> cartPrices = CardAdapter.getCartPrices();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             StringBuilder stringBuilder = new StringBuilder();
@@ -475,7 +391,7 @@ private void resendVerificationCode() {
         }
 
         if (authState != null && authState.isAuthorized() && authState.getParsedIdToken().additionalClaims.get(ADDRESS) != null) {
-           String address = authState.getParsedIdToken().additionalClaims.get(EMAIL_VERIFIED)
+           String address = authState.getParsedIdToken().additionalClaims.get(ADDRESS).toString();
                saveAddress(address);
         }
     }
