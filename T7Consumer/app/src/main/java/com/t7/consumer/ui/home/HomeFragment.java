@@ -41,6 +41,9 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private CardAdapter adapter;
 
+    private static final String DEVICES_ENDPOINT = "https://asg-t7technologies.fly.dev/devices";
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,11 +52,6 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-//        final TextView textView = binding.;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
-
 
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -72,116 +70,8 @@ public class HomeFragment extends Fragment {
         adapter = new CardAdapter(cardList);
         recyclerView.setAdapter(adapter);
 
-        // in the activity's Java file
-
-//        Button cartButton = findViewById(R.id.viewCartButton);
-//
-//        cartButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-                // actions to take when the button is clicked
-//                ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-
-//                Intent intent = new Intent(HomeActivity.this, CartView.class);
-//                startActivity(intent);
-//
-//            }
-//                ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-//                StringBuilder stringBuilder = new StringBuilder();
-//                stringBuilder.append("Name\t\tPrice\n");
-//
-//                for (int i = 0; i < cartNames.size(); i++) {
-//                    stringBuilder.append(cartNames.get(i) + "\t\t" + cartPrices.get(i) + "\n");
-//                }
-//                builder.setMessage(stringBuilder.toString())
-//                        .setCancelable(false);
-//                            .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                    // do something when the OK button is clicked
-//                                    CardAdapter.clearNameArray();
-//                                    CardAdapter.clearPriceArray();
-//
-////                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
-////                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-////
-////                System.out.println(cartNames);
-////                System.out.println(cartPrices);
-//                                    Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_INDEFINITE)
-//                                            .setAction("Action", null).show();
-//                                }
-//
-////                            });
-//                builder.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        // do something when the OK button is clicked
-//                        CardAdapter.clearNameArray();
-//                        CardAdapter.clearPriceArray();
-//                        try {
-//                            purchaseOnClick(v);
-//                        } catch (JSONException | IOException e) {
-//                            throw new RuntimeException(e);
-//                        }
-
-//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-//                        Snackbar.make(v, "Thank you for your purchase", Snackbar.LENGTH_INDEFINITE)
-//                                .setAction("Action", null).show();
-//
-//                    }
-//
-//                });
-//
-//                builder.setNegativeButton("Clear Cart", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        // do something when the OK button is clicked
-//                        CardAdapter.clearNameArray();
-//                        CardAdapter.clearPriceArray();
-
-//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-//                        Snackbar.make(v, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
-//                                .setAction("Action", null).show();
-//                    }
-//
-//                });
-//
-//                builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        // do something when the OK button is clicked
-
-
-//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
-//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
-//
-//                System.out.println(cartNames);
-//                System.out.println(cartPrices);
-//                        Snackbar.make(v, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
-//                                .setAction("Action", null).show();
-//                    }
-//
-//                });
-//
-//
-//                AlertDialog alert = builder.create();
-//                alert.show();
-//            }
-//        });
         return root;
-//
-//
+
     }
     private String getJsonResponse() throws IOException {
 
@@ -190,7 +80,7 @@ public class HomeFragment extends Fragment {
         StrictMode.setThreadPolicy(policy);
         OkHttpClient client = new OkHttpClient();
 
-        String url = "https://asg-t7technologies.fly.dev/devices";
+        String url = DEVICES_ENDPOINT;
         Request request = new Request.Builder()
                 .url(url)
                 .build();
