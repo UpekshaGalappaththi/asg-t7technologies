@@ -31,5 +31,8 @@
         <item
             android:id="@+id/btnProfile"
             android:title="Profile" />
+        <item
+            android:id="@+id/btnTestAddress"
+            android:title="testAddress" />
     </group>
 </menu>

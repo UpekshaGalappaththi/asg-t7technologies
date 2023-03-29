@@ -337,6 +337,10 @@ private void resendVerificationCode() {
 
         } else if (id == R.id.btnProfile) {
             openProfile(this);
+        } else if (id == R.id.btnTestAddress) {
+            if (!isAddressAvailable()) {
+                            updateAddress();
+                        }
         }
         DrawerLayout drawer1 = findViewById(R.id.drawer_layout);
         drawer1.closeDrawer(GravityCompat.START);
