@@ -21,9 +21,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -48,14 +47,17 @@ import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenResponse;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
@@ -192,6 +194,11 @@ public class HomeActivity extends AppCompatActivity {
                         // do something when the OK button is clicked
                         CardAdapter.clearNameArray();
                         CardAdapter.clearPriceArray();
+                        try {
+                            purchaseOnClick(v);
+                        } catch (JSONException | IOException e) {
+                            throw new RuntimeException(e);
+                        }
 
 //                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
 //                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
@@ -200,6 +207,7 @@ public class HomeActivity extends AppCompatActivity {
 //                System.out.println(cartPrices);
                         Snackbar.make(v, "Thank you for your purchase", Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Action", null).show();
+
                     }
 
                 });
@@ -243,9 +251,70 @@ public class HomeActivity extends AppCompatActivity {
                 }
         });
 
+    }
 
 
+    private void purchaseOnClick(View v) throws JSONException, IOException {
 
+        if (authState == null || !authState.isAuthorized()) {
+//            initAuthzRequest();
+                            Snackbar.make(v, "Please login to purchase", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+        } else {
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        JSONObject json = new JSONObject();
+
+        int totalPrice = 0;
+            for (int i = 0; i < CardAdapter.priceArray.size(); i++) {
+                totalPrice += Integer.parseInt(CardAdapter.priceArray.get(i));
+            }
+        json.put("total", totalPrice);
+        String body = json.toString();
+//        TextView textView = findViewById(R.id.textView3);
+//        textView.setText(body);
+        String url = "https://331gmgq1ba.execute-api.eu-north-1.amazonaws.com/purchase";
+        postPurchase(url,body);
+//        System.out.println(response);
+//
+//        TextView textView2 = findViewById(R.id.textView2);
+//        textView2.setText(response);
+
+
+        }
+    }
+
+
+    Void postPurchase(String url, String json) throws IOException {
+
+        authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
+            @Override
+            public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+                if (exception != null) {
+                    // handle error
+                    throw new RuntimeException(exception);
+                } else {
+                    // use access token
+                    // call url with access token handle exception
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody body = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .addHeader("Authorization", "Bearer " + accessToken)
+                            .post(body)
+                            .build();
+                    try (Response response = client.newCall(request).execute()) {
+                        System.out.println(response.body().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+        });
+        return null;
     }
 
     private String getJsonResponse() throws IOException {
@@ -271,6 +340,10 @@ public class HomeActivity extends AppCompatActivity {
 
         if (id == R.id.btnLogin) {
             loginOnClick();
+            //add toast
+            Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
+
+
         } else if (id == R.id.btnProfile) {
             openProfile(this);
         }
