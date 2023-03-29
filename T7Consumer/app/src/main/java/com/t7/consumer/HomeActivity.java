@@ -1,7 +1,9 @@
 package com.t7.consumer;
 
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -32,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.t7.consumer.databinding.ActivityHomeBinding;
 
@@ -47,6 +50,7 @@ import net.openid.appauth.TokenResponse;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,6 +80,7 @@ public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private RecyclerView recyclerView;
     private CardAdapter adapter;
+
     int counter = 0;
 
     @Override
@@ -136,34 +141,111 @@ public class HomeActivity extends AppCompatActivity {
         adapter = new CardAdapter(cardList);
         recyclerView.setAdapter(adapter);
 
+        // in the activity's Java file
 
-        // Inflate the layout containing the CardView
-        View cardViewLayout = getLayoutInflater().inflate(R.layout.card_view, null);
+        Button cartButton = findViewById(R.id.viewCartButton);
 
-        // Find the CardView within the inflated layout
-        CardView cardView = cardViewLayout.findViewById(R.id.cardView);
-
-        Button addToCartButton = cardViewLayout.findViewById(R.id.addToCartButton);
-        System.out.println("check");
-
-        addToCartButton.setOnClickListener(new View.OnClickListener() {
+        cartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Add to Cart" button click event
-                // For example, you can add the item to a shopping cart or show a message
-                // You can get the data from the CardView's text views, e.g.:
-//                String name = ((TextView) cardView.findViewById(R.id.name)).getText().toString();
-//                String price = ((TextView) cardView.findViewById(R.id.price)).getText().toString();
-//                // Add elements to the list
-//                list.add(name);
-                System.out.println("clicked");
-                // Print the contents of the list
-//                System.out.println(list);
-//                TextView textView = findViewById(R.id.textView3);
-//                textView.setText(list.toString());
-//                Toast.makeText(MainActivity.this, "Added " + name + " to cart for " + price, Toast.LENGTH_SHORT).show();
-            }
+                // actions to take when the button is clicked
+//                ArrayList<String> cartNames = CardAdapter.getCartNames();
+//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+//
+//                System.out.println(cartNames);
+//                System.out.println(cartPrices);
+
+//                Intent intent = new Intent(HomeActivity.this, CartView.class);
+//                startActivity(intent);
+//
+//            }
+                ArrayList<String> cartNames = CardAdapter.getCartNames();
+                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Name\t\tPrice\n");
+
+                for (int i = 0; i < cartNames.size(); i++) {
+                    stringBuilder.append(cartNames.get(i) + "\t\t" + cartPrices.get(i) + "\n");
+                }
+                builder.setMessage(stringBuilder.toString())
+                            .setCancelable(false);
+//                            .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    // do something when the OK button is clicked
+//                                    CardAdapter.clearNameArray();
+//                                    CardAdapter.clearPriceArray();
+//
+////                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
+////                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+////
+////                System.out.println(cartNames);
+////                System.out.println(cartPrices);
+//                                    Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_INDEFINITE)
+//                                            .setAction("Action", null).show();
+//                                }
+//
+//                            });
+                builder.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // do something when the OK button is clicked
+                        CardAdapter.clearNameArray();
+                        CardAdapter.clearPriceArray();
+
+//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
+//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+//
+//                System.out.println(cartNames);
+//                System.out.println(cartPrices);
+                        Snackbar.make(v, "Thank you for your purchase", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Action", null).show();
+                    }
+
+                });
+
+                builder.setNegativeButton("Clear Cart", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // do something when the OK button is clicked
+                        CardAdapter.clearNameArray();
+                        CardAdapter.clearPriceArray();
+
+//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
+//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+//
+//                System.out.println(cartNames);
+//                System.out.println(cartPrices);
+                        Snackbar.make(v, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Action", null).show();
+                    }
+
+                });
+
+                builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // do something when the OK button is clicked
+
+
+//                                                    ArrayList<String> cartNames = CardAdapter.getCartNames();
+//                ArrayList<String> cartPrices = CardAdapter.getCartPrices();
+//
+//                System.out.println(cartNames);
+//                System.out.println(cartPrices);
+//                        Snackbar.make(v, "Cleared Cart", Snackbar.LENGTH_INDEFINITE)
+//                                .setAction("Action", null).show();
+                    }
+
+                });
+
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
         });
+
+
+
+
     }
 
     private String getJsonResponse() throws IOException {
