@@ -15,7 +15,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "CLIENT_ID", "\"rGdUjiBMxSaLJpPGefj96ULJxdEa\"")
+        buildConfigField("String", "CLIENT_ID", "\"<client_id>\"")
         buildConfigField("String", "REDIRECT_URI", "\"com.t7.consumer://callback\"")
         buildConfigField("String", "SCOPES", "\"openid address email loyalty profile internal_login\"")
         buildConfigField("String", "TOKEN_ENDPOINT", "\"https://api.asgardeo.io/t/t7technologies/oauth2/token\"")
