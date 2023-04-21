@@ -111,7 +111,7 @@ The overall architecture level request flow of this project is depicted in the d
 - Under 'Access Token' select 'JWT'
 - Update the Application
 - Furthermore since this application is using a Points based loyalty system and tiers, you will need to create two custom attributes and send them in the Token as well.
-- Create the custom attributes 'points' and 'tier' in the Asgardeo console. You can configure it according to the [documentation](https://wso2.com/asgardeo/docs/guides/applications/register-standard-based-app/#register-an-application).
+- Create the custom attributes 'points' and 'tier' in the Asgardeo console. You can configure it according to the [documentation](https://wso2.com/asgardeo/docs/guides/users/attributes/manage-attributes/#add-custom-attributes).
 - Next you will need to create a custom scope called 'loyalty' where the custom attributes 'points' and 'tier' are included. You can learn how to configure a custom scope from [Here](https://wso2.com/asgardeo/docs/guides/users/attributes/manage-scopes/#create-custom-scopes).
 - Finally add the custom scope to the application user attributes by selecting the scope in User Attributes tab in the application and updating.
 - Now the application will request the loyalty scope as well and will receive the custom attribute values in the token.
